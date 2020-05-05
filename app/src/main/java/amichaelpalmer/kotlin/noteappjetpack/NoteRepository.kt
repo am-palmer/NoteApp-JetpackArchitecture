@@ -22,7 +22,7 @@ class NoteRepository(application: Application) {
         DeleteNoteAsyncTask(noteDao).execute(note)
     }
 
-    fun deleteAllNotes(note: Note) {
+    fun deleteAllNotes() {
         DeleteAllNotesAsyncTask(noteDao).execute()
     }
 

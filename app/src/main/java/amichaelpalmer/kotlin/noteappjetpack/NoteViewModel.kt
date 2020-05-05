@@ -2,7 +2,8 @@ package amichaelpalmer.kotlin.noteappjetpack
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: NoteRepository by lazy { NoteRepository(application) }
@@ -26,4 +27,10 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
     val getAllNotes get() = allNotes
 
+}
+
+class NoteViewModelFactory(val application: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return NoteViewModel(application) as T
+    }
 }

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 // Room annotation - creates SQLITE table at compile time
 @Entity(tableName = "note_table")
-class Note(private val title: String, private val description: String, private val priority: Int) {
+open class Note(protected val title: String, protected val description: String, protected val priority: Int) {
 
     // Not sure of access level
     // Allows us to uniquely identify each entry

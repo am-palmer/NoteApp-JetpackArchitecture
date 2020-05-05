@@ -8,15 +8,19 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.jetpackarchitecturedemo.R
 
 class MainActivity : AppCompatActivity() {
-    private var noteViewModel: NoteViewModel? = null
+    // We ask the system for a ViewModel; don't have to handle instance management
+    private val noteViewModel by lazy {
+        ViewModelProvider(
+            this,
+            NoteViewModelFactory(application)
+        ).get(NoteViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // We ask the system for a ViewModel; don't have to handle instance management
-        noteViewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
-        noteViewModel?.getAllNotes?.observe(this, Observer {
+        noteViewModel.getAllNotes.observe(this, Observer {
             Toast.makeText(this, "Observer onchanged!", Toast.LENGTH_SHORT).show()
         })
     }

@@ -4,12 +4,13 @@ import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModel
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModelFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.jetpackarchitecturedemo.R
 
 class MainActivity : AppCompatActivity() {
+
     // We ask the system for a ViewModel; don't have to handle instance management
     private val noteViewModel by lazy {
         ViewModelProvider(
@@ -25,7 +26,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         noteViewModel.getAllNotes.observe(this, Observer {
-            Toast.makeText(this, "Observer onchanged!", Toast.LENGTH_SHORT).show()
+            Log.d(TAG, ".observe -> onChanged starts")
         })
+    }
+
+    companion object {
+        const val TAG = "MainActivity"
     }
 }

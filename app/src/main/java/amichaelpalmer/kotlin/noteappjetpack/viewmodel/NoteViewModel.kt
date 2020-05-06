@@ -35,7 +35,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
 }
 
-class NoteViewModelFactory(val application: Application) : ViewModelProvider.Factory {
+class NoteViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return NoteViewModel(
             application

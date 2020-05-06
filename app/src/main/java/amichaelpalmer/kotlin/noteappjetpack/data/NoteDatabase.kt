@@ -1,4 +1,4 @@
-package amichaelpalmer.kotlin.noteappjetpack
+package amichaelpalmer.kotlin.noteappjetpack.data
 
 import android.content.Context
 import android.os.AsyncTask
@@ -39,7 +39,9 @@ abstract class NoteDatabase : RoomDatabase() {
         private val roomCallback = object : RoomDatabase.Callback() {
             override fun onCreate(sqLiteDatabase: SupportSQLiteDatabase) {
                 super.onCreate(sqLiteDatabase)
-                PopulateDbAsyncTask(instance)
+                PopulateDbAsyncTask(
+                    instance
+                )
                     .execute()
             }
         }
@@ -51,9 +53,27 @@ abstract class NoteDatabase : RoomDatabase() {
 
         override fun doInBackground(vararg p0: Unit?) {
             // Insert some placeholder notes into the database
-            noteDao?.insert(Note("Title 1", "Description 1", 1))
-            noteDao?.insert(Note("Title 2", "Description 2", 2))
-            noteDao?.insert(Note("Title 3", "Description 3", 3))
+            noteDao?.insert(
+                Note(
+                    "Title 1",
+                    "Description 1",
+                    1
+                )
+            )
+            noteDao?.insert(
+                Note(
+                    "Title 2",
+                    "Description 2",
+                    2
+                )
+            )
+            noteDao?.insert(
+                Note(
+                    "Title 3",
+                    "Description 3",
+                    3
+                )
+            )
         }
     }
 

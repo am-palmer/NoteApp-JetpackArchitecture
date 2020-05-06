@@ -1,4 +1,4 @@
-package amichaelpalmer.kotlin.noteappjetpack
+package amichaelpalmer.kotlin.noteappjetpack.data
 
 import android.app.Application
 import android.os.AsyncTask
@@ -11,19 +11,27 @@ class NoteRepository(application: Application) {
     // Note room doesn't allow these functions on the main thread as it could freeze the app. We have to use a second thread (asynctask here todo: replace asynctask with coroutine)
     // These represent the API exposed by the repository to the ViewModel(s)
     fun insert(note: Note): AsyncTask<Note, Unit, Unit>? {
-        return InsertNoteAsyncTask(noteDao).execute(note)
+        return InsertNoteAsyncTask(
+            noteDao
+        ).execute(note)
     }
 
     fun update(note: Note) {
-        UpdateNoteAsyncTask(noteDao).execute(note)
+        UpdateNoteAsyncTask(
+            noteDao
+        ).execute(note)
     }
 
     fun delete(note: Note) {
-        DeleteNoteAsyncTask(noteDao).execute(note)
+        DeleteNoteAsyncTask(
+            noteDao
+        ).execute(note)
     }
 
     fun deleteAllNotes() {
-        DeleteAllNotesAsyncTask(noteDao).execute()
+        DeleteAllNotesAsyncTask(
+            noteDao
+        ).execute()
     }
 
     val getAllNotes get() = allNotes

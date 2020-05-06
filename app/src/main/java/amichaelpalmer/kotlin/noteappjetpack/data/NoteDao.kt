@@ -1,6 +1,6 @@
-package amichaelpalmer.kotlin.noteappjetpack
+package amichaelpalmer.kotlin.noteappjetpack.data
 
-import amichaelpalmer.kotlin.noteappjetpack.Note
+import amichaelpalmer.kotlin.noteappjetpack.data.Note
 import androidx.lifecycle.LiveData
 import androidx.room.*
 

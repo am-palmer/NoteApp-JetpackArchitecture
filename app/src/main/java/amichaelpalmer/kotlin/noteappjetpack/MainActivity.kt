@@ -1,5 +1,7 @@
 package amichaelpalmer.kotlin.noteappjetpack
 
+import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModel
+import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModelFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -12,7 +14,9 @@ class MainActivity : AppCompatActivity() {
     private val noteViewModel by lazy {
         ViewModelProvider(
             this,
-            NoteViewModelFactory(application)
+            NoteViewModelFactory(
+                application
+            )
         ).get(NoteViewModel::class.java)
     }
 

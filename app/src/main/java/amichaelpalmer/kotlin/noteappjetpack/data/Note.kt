@@ -1,4 +1,4 @@
-package amichaelpalmer.kotlin.noteappjetpack
+package amichaelpalmer.kotlin.noteappjetpack.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

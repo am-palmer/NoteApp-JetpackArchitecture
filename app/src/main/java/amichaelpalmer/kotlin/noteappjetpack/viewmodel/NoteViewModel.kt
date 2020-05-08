@@ -4,6 +4,7 @@ import amichaelpalmer.kotlin.noteappjetpack.data.Note
 import amichaelpalmer.kotlin.noteappjetpack.data.NoteRepository
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
@@ -31,7 +32,9 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         repository.deleteAllNotes()
     }
 
-    val getAllNotes get() = allNotes
+    fun getNoteList(): LiveData<List<Note>>{
+        return allNotes
+    }
 
 }
 

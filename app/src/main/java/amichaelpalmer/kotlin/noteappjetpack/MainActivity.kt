@@ -1,5 +1,6 @@
 package amichaelpalmer.kotlin.noteappjetpack
 
+import amichaelpalmer.kotlin.noteappjetpack.data.Note
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModel
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModelFactory
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackarchitecturedemo.R
 
 class MainActivity : AppCompatActivity() {
@@ -25,8 +28,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        noteViewModel.getAllNotes.observe(this, Observer {
-            Log.d(TAG, ".observe -> onChanged starts")
+        val recyclerView: RecyclerView = findViewById(R.id.list_recycler_view)
+       // recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true) // Efficiency, true if we know the recyclerview size won't change
+        val adapter = NoteAdapter()
+        recyclerView.adapter = adapter
+
+        noteViewModel.getNoteList().observe(this, Observer<List<Note>> {
+            // Triggered every time there is a change to the LiveData
+            adapter.setNotes(it)
         })
     }
 

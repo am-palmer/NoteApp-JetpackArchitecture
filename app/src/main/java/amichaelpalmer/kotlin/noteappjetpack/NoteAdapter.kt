@@ -11,7 +11,6 @@ import com.example.jetpackarchitecturedemo.R
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     private var notes: List<Note> = ArrayList()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val itemView: View =
             LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
@@ -29,7 +28,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         return notes.size
     }
 
-    public fun setNotes(notes: List<Note>){
+    fun setNotes(notes: List<Note>){
         this.notes = notes
         notifyDataSetChanged()
     }

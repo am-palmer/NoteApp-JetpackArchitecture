@@ -1,82 +1,94 @@
 package amichaelpalmer.kotlin.noteappjetpack.view
 
-import android.app.Activity
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import android.widget.EditText
 import android.widget.NumberPicker
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.jetpackarchitecturedemo.R
 
-// todo convert to fragment
+// todo: hook up to the main fragment
 
-class AddEditNoteActivity : AppCompatActivity() {
+class AddEditNoteFragment : Fragment() {
     private lateinit var editTextTitle: EditText
     private lateinit var editTextDescription: EditText
     private lateinit var numberPickerPriority: NumberPicker
 
+    private var id: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        id = savedInstanceState?.getInt(BUNDLE_ID)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_note)
-        numberPickerPriority = findViewById(R.id.number_picker_priority)
-        editTextTitle = findViewById(R.id.edit_text_title)
-        editTextDescription = findViewById(R.id.edit_text_description)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(
+            R.layout.fragment_add_edit_note, container
+            , false
+        )
+        numberPickerPriority = view.findViewById(R.id.number_picker_priority)
+        editTextTitle = view.findViewById(R.id.edit_text_title)
+        editTextDescription = view.findViewById(R.id.edit_text_description)
 
         numberPickerPriority.minValue = 1
         numberPickerPriority.maxValue = 10
 
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
-        // Check whether we are editing an existing note or creating a new one
-        if (intent.hasExtra(EXTRA_ID)) {
-            title = "Edit Note"
-            editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE))
-            editTextDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION))
-            numberPickerPriority.value = intent.getIntExtra(EXTRA_PRIORITY, 1)
-        } else {
-            title = "Add Note"
+        // Check if we're editing a saved note
+        if (savedInstanceState != null) {
+            // todo: set title to "Edit"
+
+            // Get fields from bundle and set them in the views
+            editTextTitle.setText(savedInstanceState.getString(BUNDLE_TITLE, "Title"))
+            editTextDescription.setText(
+                savedInstanceState.getString(
+                    BUNDLE_DESCRIPTION,
+                    "Description"
+                )
+            )
+            numberPickerPriority.value = savedInstanceState.getInt(BUNDLE_PRIORITY, 1)
+
         }
+
+        return view
     }
 
     private fun saveNote() {
+
         val title = editTextTitle.text.toString()
         val description = editTextDescription.text.toString()
         val priority = numberPickerPriority.value
 
         if (title.trim().isEmpty() || description.trim().isEmpty()) {
-            Toast.makeText(
-                this,
-                "Please insert a title and description for the note",
-                Toast.LENGTH_SHORT
-            )
+            // todo: display toast message
+//            Toast.makeText(
+//                this,
+//                "Please insert a title and description for the note",
+//                Toast.LENGTH_SHORT
+//            )
             return
         }
 
-        val data = Intent()
+        // Make a bundle and add the new values
+        val bundle = Bundle()
+        bundle.putString(BUNDLE_TITLE, title)
+        bundle.putString(BUNDLE_DESCRIPTION, description)
+        bundle.putInt(BUNDLE_PRIORITY, priority)
 
-        data.putExtra(EXTRA_TITLE, title)
-        data.putExtra(EXTRA_DESCRIPTION, description)
-        data.putExtra(EXTRA_PRIORITY, priority)
-
-        // Add the primary key if it exists
-        val id = intent.getIntExtra(
-            EXTRA_ID,
-            INVALID_ID
-        )
-        if (id != INVALID_ID) {
-            data.putExtra(EXTRA_ID, id)
+        if (id != null) {
+            bundle.putInt(BUNDLE_ID, id!!)
         }
 
-        setResult(Activity.RESULT_OK, data)
-        finish()
+        // todo: pass data back to the main fragment so it can be inserted in the list/room db
+
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.add_note_menu, menu)
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.add_note_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -90,10 +102,10 @@ class AddEditNoteActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_ID = "amichaelpalmer.kotlin.noteappjetpack.EXTRA_ID"
-        const val EXTRA_TITLE = "amichaelpalmer.kotlin.noteappjetpack.EXTRA_TITLE"
-        const val EXTRA_DESCRIPTION = "amichaelpalmer.kotlin.noteappjetpack.EXTRA_DESCRIPTION"
-        const val EXTRA_PRIORITY = "amichaelpalmer.kotlin.noteappjetpack.EXTRA_PRIORITY"
+        const val BUNDLE_ID = "EXTRA_ID"
+        const val BUNDLE_TITLE = "EXTRA_TITLE"
+        const val BUNDLE_DESCRIPTION = "EXTRA_DESCRIPTION"
+        const val BUNDLE_PRIORITY = "EXTRA_PRIORITY"
         const val INVALID_ID = -1
     }
 }

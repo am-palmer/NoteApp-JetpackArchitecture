@@ -44,9 +44,9 @@ class MainActivity : AppCompatActivity() {
             )
         ).get(NoteViewModel::class.java)
 
-        noteViewModel.getNoteList().observe(this, Observer<List<Note>> {
+        noteViewModel.getNoteList().observe(this, Observer {
             // Triggered every time there is a change to the LiveData
-            adapter.setNotes(it)
+            adapter.submitList(it)
         })
         // Set up deletion by swiping
         val swipeDirs = ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)

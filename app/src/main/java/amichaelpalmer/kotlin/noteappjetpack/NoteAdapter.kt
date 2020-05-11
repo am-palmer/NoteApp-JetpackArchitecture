@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackarchitecturedemo.R
 
-class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+class NoteAdapter : ListAdapter<Note, NoteAdapter.NoteViewHolder>(DIFF_CALLBACK) {
     private var notes: List<Note> = ArrayList()
     private var listener: OnItemLongTapListener? = null
 
@@ -19,23 +21,27 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        val currentNote: Note = notes.get(position)
+        val currentNote: Note = getItem(position)
         holder.getTitle.text = currentNote.getTitle
         holder.getDescription.text = currentNote.getDescription
         holder.getPriority.text = currentNote.getPriority.toString()
     }
 
-    override fun getItemCount(): Int {
-        return notes.size
-    }
-
-    fun setNotes(notes: List<Note>) {
-        this.notes = notes
-        notifyDataSetChanged()
-    }
-
     fun getNoteAtPosition(position: Int): Note {
-        return notes[position]
+        return getItem(position)
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {
+            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+                return oldItem.getTitle == newItem.getTitle && oldItem.getDescription == newItem.getDescription
+                        && oldItem.getPriority == newItem.getPriority
+            }
+        }
     }
 
     inner class NoteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -51,7 +57,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
             itemView.setOnLongClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    listener?.onItemLongTap(notes[position])
+                    listener?.onItemLongTap(getItem(position))
                 }
                 true
             }

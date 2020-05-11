@@ -33,6 +33,10 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun getNoteAtPosition(position: Int): Note{
+        return notes[position]
+    }
+
     inner class NoteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val title: TextView = view.findViewById(R.id.text_view_title)
         private val description: TextView = view.findViewById(R.id.text_view_description)

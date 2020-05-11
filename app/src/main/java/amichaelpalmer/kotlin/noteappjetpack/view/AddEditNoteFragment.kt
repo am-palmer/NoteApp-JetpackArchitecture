@@ -1,4 +1,4 @@
-package amichaelpalmer.kotlin.noteappjetpack
+package amichaelpalmer.kotlin.noteappjetpack.view
 
 import android.app.Activity
 import android.content.Intent
@@ -61,7 +61,10 @@ class AddEditNoteActivity : AppCompatActivity() {
         data.putExtra(EXTRA_PRIORITY, priority)
 
         // Add the primary key if it exists
-        val id = intent.getIntExtra(EXTRA_ID, INVALID_ID)
+        val id = intent.getIntExtra(
+            EXTRA_ID,
+            INVALID_ID
+        )
         if (id != INVALID_ID) {
             data.putExtra(EXTRA_ID, id)
         }

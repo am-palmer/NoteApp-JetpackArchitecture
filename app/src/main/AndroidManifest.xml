@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="amichaelpalmer.kotlin.noteappjetpack.AddNoteActivity"
+            android:name="amichaelpalmer.kotlin.noteappjetpack.AddEditNoteActivity"
             android:parentActivityName="amichaelpalmer.kotlin.noteappjetpack.MainActivity"></activity>
         <activity android:name="amichaelpalmer.kotlin.noteappjetpack.MainActivity"
             android:launchMode="singleTop">

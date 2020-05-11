@@ -10,6 +10,7 @@ import com.example.jetpackarchitecturedemo.R
 
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     private var notes: List<Note> = ArrayList()
+    private var listener: OnItemLongTapListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val itemView: View =
@@ -28,12 +29,12 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         return notes.size
     }
 
-    fun setNotes(notes: List<Note>){
+    fun setNotes(notes: List<Note>) {
         this.notes = notes
         notifyDataSetChanged()
     }
 
-    fun getNoteAtPosition(position: Int): Note{
+    fun getNoteAtPosition(position: Int): Note {
         return notes[position]
     }
 
@@ -46,6 +47,23 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         val getDescription get() = description
         val getPriority get() = priority
 
+        init {
+            itemView.setOnLongClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener?.onItemLongTap(notes[position])
+                }
+                true
+            }
+        }
+
     }
 
+    interface OnItemLongTapListener {
+        fun onItemLongTap(note: Note)
+    }
+
+    fun setOnItemLongTapListener(listener: OnItemLongTapListener) {
+        this.listener = listener
+    }
 }

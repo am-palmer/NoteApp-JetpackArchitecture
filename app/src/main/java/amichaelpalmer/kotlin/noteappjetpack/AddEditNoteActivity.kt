@@ -13,7 +13,7 @@ import com.example.jetpackarchitecturedemo.R
 
 // todo convert to fragment
 
-class AddNoteActivity : AppCompatActivity() {
+class AddEditNoteActivity : AppCompatActivity() {
     private lateinit var editTextTitle: EditText
     private lateinit var editTextDescription: EditText
     private lateinit var numberPickerPriority: NumberPicker
@@ -29,11 +29,18 @@ class AddNoteActivity : AppCompatActivity() {
         numberPickerPriority.maxValue = 10
 
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
-        title = "Add Note"
-
+        // Check whether we are editing an existing note or creating a new one
+        if (intent.hasExtra(EXTRA_ID)) {
+            title = "Edit Note"
+            editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE))
+            editTextDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION))
+            numberPickerPriority.value = intent.getIntExtra(EXTRA_PRIORITY, 1)
+        } else {
+            title = "Add Note"
+        }
     }
 
-    fun saveNote() {
+    private fun saveNote() {
         val title = editTextTitle.text.toString()
         val description = editTextDescription.text.toString()
         val priority = numberPickerPriority.value
@@ -48,9 +55,16 @@ class AddNoteActivity : AppCompatActivity() {
         }
 
         val data = Intent()
+
         data.putExtra(EXTRA_TITLE, title)
         data.putExtra(EXTRA_DESCRIPTION, description)
         data.putExtra(EXTRA_PRIORITY, priority)
+
+        // Add the primary key if it exists
+        val id = intent.getIntExtra(EXTRA_ID, INVALID_ID)
+        if (id != INVALID_ID) {
+            data.putExtra(EXTRA_ID, id)
+        }
 
         setResult(Activity.RESULT_OK, data)
         finish()
@@ -73,8 +87,10 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val EXTRA_ID = "amichaelpalmer.kotlin.noteappjetpack.EXTRA_ID"
         const val EXTRA_TITLE = "amichaelpalmer.kotlin.noteappjetpack.EXTRA_TITLE"
         const val EXTRA_DESCRIPTION = "amichaelpalmer.kotlin.noteappjetpack.EXTRA_DESCRIPTION"
         const val EXTRA_PRIORITY = "amichaelpalmer.kotlin.noteappjetpack.EXTRA_PRIORITY"
+        const val INVALID_ID = -1
     }
 }

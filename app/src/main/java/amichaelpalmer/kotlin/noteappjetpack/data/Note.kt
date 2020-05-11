@@ -17,5 +17,7 @@ open class Note(protected val title: String, protected val description: String, 
     val getTitle get() = title
     val getDescription get() = description
     val getPriority get() = priority
+    //val getId get() = id
+
 
 }

@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         val floatingActionButton: FloatingActionButton = findViewById(R.id.add_note_fab)
         floatingActionButton.setOnClickListener {
-            val intent = Intent(this, AddNoteActivity::class.java)
+            val intent = Intent(this, AddEditNoteActivity::class.java)
             startActivityForResult(intent, ADD_NOTE_REQUEST)
         }
 
@@ -64,19 +65,50 @@ class MainActivity : AppCompatActivity() {
             }
         }
         ).attachToRecyclerView(recyclerView)
+
+        adapter.setOnItemLongTapListener(object : NoteAdapter.OnItemLongTapListener {
+            override fun onItemLongTap(note: Note) {
+                val intent = Intent(this@MainActivity, AddEditNoteActivity::class.java)
+                // Pass the primary key so Room knows which note to update
+                intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.id)
+                intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle)
+                intent.putExtra(AddEditNoteActivity.EXTRA_PRIORITY, note.getPriority)
+                intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription)
+
+                startActivityForResult(intent, EDIT_NOTE_REQUEST)
+
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_NOTE_REQUEST && resultCode == Activity.RESULT_OK) {
-            val title = data?.getStringExtra(AddNoteActivity.EXTRA_TITLE) ?: "Title"
+            val title = data?.getStringExtra(AddEditNoteActivity.EXTRA_TITLE) ?: "Title"
             val description =
-                data?.getStringExtra(AddNoteActivity.EXTRA_DESCRIPTION) ?: "Description"
-            val priority = data?.getIntExtra(AddNoteActivity.EXTRA_PRIORITY, 1) ?: 1
+                data?.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION) ?: "Description"
+            val priority = data?.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1) ?: 1
 
             val note = Note(title, description, priority)
             noteViewModel.insert(note)
             Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show()
+        } else if (requestCode == EDIT_NOTE_REQUEST && resultCode == Activity.RESULT_OK) {
+            // We retrieve the ID (primary key) of the note being edited
+            val id = data?.getIntExtra(AddEditNoteActivity.EXTRA_ID, AddEditNoteActivity.INVALID_ID)
+            if (id == AddEditNoteActivity.INVALID_ID) {
+                Log.e(TAG, ".onActivityResult: Error passing value from AddEditNoteActivity")
+                return
+            }
+            val title = data?.getStringExtra(AddEditNoteActivity.EXTRA_TITLE) ?: "Title"
+            val description =
+                data?.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION) ?: "Description"
+            val priority = data?.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1) ?: 1
+
+            val note = Note(title, description, priority)
+            note.id = id!!
+            noteViewModel.update(note)
+            Toast.makeText(this, "Note updated", Toast.LENGTH_SHORT)
+
         } else {
             // Cancelled
         }
@@ -85,6 +117,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val TAG = "MainActivity"
         const val ADD_NOTE_REQUEST = 1
+        const val EDIT_NOTE_REQUEST = 2
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

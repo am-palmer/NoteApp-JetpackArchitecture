@@ -10,16 +10,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <!-- The main content view where fragments are loaded -->
-    <fragment
-        android:id="@+id/activity_nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="400dp"
-        android:layout_gravity="center"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_main"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/main_navigation"/>
+        <!-- The main content view where fragments are loaded -->
+        <fragment
+            android:id="@+id/activity_nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="400dp"
+            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_main"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/main_navigation"
+            tools:ignore="FragmentTagUsage" />
 
     </LinearLayout>
 

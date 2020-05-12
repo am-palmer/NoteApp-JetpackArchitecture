@@ -26,7 +26,7 @@ open class Note(
     constructor(parcel: Parcel) : this(
         parcel.readString()!!, // Title
         parcel.readString()!!, // Description
-        parcel.readInt()!! // Priority
+        parcel.readInt() // Priority
     )
 
     override fun writeToParcel(dest: Parcel, flags: Int) {

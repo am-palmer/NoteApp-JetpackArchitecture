@@ -5,7 +5,6 @@ import amichaelpalmer.kotlin.noteappjetpack.data.Note
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModel
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModelFactory
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -18,9 +17,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackarchitecturedemo.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
-
-// todo: confirm dialog fragment for 'delete all notes'
 
 class MainFragment : Fragment() {
 

@@ -5,6 +5,8 @@ import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModelFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.jetpackarchitecturedemo.R
 
 // todo: finish writing fragments, then implement navigation graph with safeargs
@@ -14,15 +16,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // We ask the system for a ViewModel; don't have to handle instance management
-        val noteViewModel = ViewModelProvider(
-            this,
-            NoteViewModelFactory(
-                application
-            )
-        ).get(NoteViewModel::class.java)
+
 
         // todo: launch mainfragment and pass viewmodel
+
+        //var navController = findNavController(R.id.activity_nav_host_fragment)
 
 
     }

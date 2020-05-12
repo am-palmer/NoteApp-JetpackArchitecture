@@ -53,21 +53,21 @@ abstract class NoteDatabase : RoomDatabase() {
 
         override fun doInBackground(vararg p0: Unit?) {
             // Insert some placeholder notes into the database
-            noteDao?.insert(
+            noteDao?.insertOrUpdate(
                 Note(
                     "Title 1",
                     "Description 1",
                     1
                 )
             )
-            noteDao?.insert(
+            noteDao?.insertOrUpdate(
                 Note(
                     "Title 2",
                     "Description 2",
                     2
                 )
             )
-            noteDao?.insert(
+            noteDao?.insertOrUpdate(
                 Note(
                     "Title 3",
                     "Description 3",

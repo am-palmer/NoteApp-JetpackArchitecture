@@ -1,24 +1,29 @@
 package amichaelpalmer.kotlin.noteappjetpack.view
 
+import amichaelpalmer.kotlin.noteappjetpack.data.Note
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.NumberPicker
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.example.jetpackarchitecturedemo.R
-
-// todo: hook up to the main fragment
 
 class AddEditNoteFragment : Fragment() {
     private lateinit var editTextTitle: EditText
     private lateinit var editTextDescription: EditText
     private lateinit var numberPickerPriority: NumberPicker
 
-    private var id: Int? = null
+    private var note: Note? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        id = savedInstanceState?.getInt(BUNDLE_ID)
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            val safeArgs = AddEditNoteFragmentArgs.fromBundle(it)
+            note = safeArgs.note // Null if we are creating a new note
+        }
     }
 
     override fun onCreateView(
@@ -26,63 +31,37 @@ class AddEditNoteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(
+        return inflater.inflate(
             R.layout.fragment_add_edit_note, container
             , false
         )
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+
         numberPickerPriority = view.findViewById(R.id.number_picker_priority)
         editTextTitle = view.findViewById(R.id.edit_text_title)
         editTextDescription = view.findViewById(R.id.edit_text_description)
-
         numberPickerPriority.minValue = 1
         numberPickerPriority.maxValue = 10
 
         // Check if we're editing a saved note
-        if (savedInstanceState != null) {
-            // todo: set title to "Edit"
-
+        if (note != null) { // We're editing an existing note
+            Log.d(TAG, ".onCreateView: note not null, setting view fields for editing")
+            requireActivity().title = "Edit"
             // Get fields from bundle and set them in the views
-            editTextTitle.setText(savedInstanceState.getString(BUNDLE_TITLE, "Title"))
+            editTextTitle.setText(note?.getTitle)
             editTextDescription.setText(
-                savedInstanceState.getString(
-                    BUNDLE_DESCRIPTION,
-                    "Description"
-                )
+                note?.getDescription
             )
-            numberPickerPriority.value = savedInstanceState.getInt(BUNDLE_PRIORITY, 1)
+            numberPickerPriority.value = note?.getPriority ?: 1
 
+        } else { // We're creating a new note
+            requireActivity().title = "New"
+            numberPickerPriority.value = 1 // May be unneeded
         }
-
-        return view
-    }
-
-    private fun saveNote() {
-
-        val title = editTextTitle.text.toString()
-        val description = editTextDescription.text.toString()
-        val priority = numberPickerPriority.value
-
-        if (title.trim().isEmpty() || description.trim().isEmpty()) {
-            // todo: display toast message
-//            Toast.makeText(
-//                this,
-//                "Please insert a title and description for the note",
-//                Toast.LENGTH_SHORT
-//            )
-            return
-        }
-
-        // Make a bundle and add the new values
-        val bundle = Bundle()
-        bundle.putString(BUNDLE_TITLE, title)
-        bundle.putString(BUNDLE_DESCRIPTION, description)
-        bundle.putInt(BUNDLE_PRIORITY, priority)
-
-        if (id != null) {
-            bundle.putInt(BUNDLE_ID, id!!)
-        }
-
-        // todo: pass data back to the main fragment so it can be inserted in the list/room db
 
     }
 
@@ -101,7 +80,32 @@ class AddEditNoteFragment : Fragment() {
         }
     }
 
+    private fun saveNote() {
+        val title = editTextTitle.text.toString()
+        val description = editTextDescription.text.toString()
+        val priority = numberPickerPriority.value
+
+        if (title.trim().isEmpty()) {
+            Toast.makeText(requireActivity(), "Note requires a title", Toast.LENGTH_SHORT).show()
+            return
+        } else if (description.trim().isEmpty()) {
+            Toast.makeText(requireActivity(), "Note requires a description", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val newNote = Note(title, description, priority)
+        if (note != null) {
+            // If note currently exists, get the ID so we can replace it in Room
+            newNote.id = note!!.id
+        }
+
+        val action = AddEditNoteFragmentDirections.actionAddEditNoteFragmentToMainFragment(newNote)
+        requireView().findNavController()
+            .navigate(action)
+    }
+
     companion object {
+        private const val TAG = "AddEditNoteFragment"
         const val BUNDLE_ID = "EXTRA_ID"
         const val BUNDLE_TITLE = "EXTRA_TITLE"
         const val BUNDLE_DESCRIPTION = "EXTRA_DESCRIPTION"

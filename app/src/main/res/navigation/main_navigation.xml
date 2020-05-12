@@ -9,10 +9,27 @@
         android:id="@+id/mainFragment"
         android:name="amichaelpalmer.kotlin.noteappjetpack.view.MainFragment"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_main"/>
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_addEditNoteFragment"
+            app:destination="@id/addEditNoteFragment" />
+        <argument
+            android:name="note"
+            app:argType="amichaelpalmer.kotlin.noteappjetpack.data.Note"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/addEditNoteFragment"
         android:name="amichaelpalmer.kotlin.noteappjetpack.view.AddEditNoteFragment"
         android:label="fragment_add_edit_note"
-        tools:layout="@layout/fragment_add_edit_note" />
+        tools:layout="@layout/fragment_add_edit_note" >
+        <action
+            android:id="@+id/action_addEditNoteFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <argument
+            android:name="note"
+            app:argType="amichaelpalmer.kotlin.noteappjetpack.data.Note"
+            app:nullable="true" />
+    </fragment>
 </navigation>

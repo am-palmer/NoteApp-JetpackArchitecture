@@ -13,7 +13,6 @@ import com.example.jetpackarchitecturedemo.R
 class NoteAdapter : ListAdapter<Note, NoteAdapter.NoteViewHolder>(
     DIFF_CALLBACK
 ) {
-    private var notes: List<Note> = ArrayList()
     private var listener: OnItemLongTapListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {

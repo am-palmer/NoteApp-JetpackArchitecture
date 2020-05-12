@@ -4,8 +4,8 @@ import amichaelpalmer.kotlin.noteappjetpack.adapter.NoteAdapter
 import amichaelpalmer.kotlin.noteappjetpack.data.Note
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModel
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModelFactory
-import android.app.Activity
-import android.content.Intent
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -19,7 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackarchitecturedemo.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-// todo: edit doesn't replace note, delete isn't working
+
+// todo: confirm dialog fragment for 'delete all notes'
 
 class MainFragment : Fragment() {
 
@@ -41,8 +42,7 @@ class MainFragment : Fragment() {
             val safeArgs = MainFragmentArgs.fromBundle(it)
             val note = safeArgs.note
             if (note != null) {
-                saveNoteInViewModel(note)
-
+                saveUpdateNoteInViewModel(note)
             }
         }
     }
@@ -55,11 +55,6 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        this.arguments?.clear() // Clear Note reference if we have one (from AddEditNoteFragment)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().title = "Notes"
@@ -69,11 +64,11 @@ class MainFragment : Fragment() {
         floatingActionButton.setOnClickListener {
             Log.d(TAG, "floatingActionButton clicked")
             val action =
-                MainFragmentDirections.actionMainFragmentToAddEditNoteFragment(null) // Null indicates a new note
+                MainFragmentDirections.actionMainFragmentToAddEditNoteFragment(null) // We aren't editing a note so we pass null
             view.findNavController().navigate(action)
         }
         val recyclerView: RecyclerView = view.findViewById(R.id.list_recycler_view)
-        recyclerView.setHasFixedSize(true) // Efficiency, true if we know the recyclerview size won't change
+        recyclerView.setHasFixedSize(true) // Efficiency, true if we know the RecyclerView size won't change
         val adapter = NoteAdapter()
         recyclerView.adapter = adapter
 
@@ -109,9 +104,9 @@ class MainFragment : Fragment() {
         })
     }
 
-    private fun saveNoteInViewModel(note: Note) {
-        Toast.makeText(activity, "Note saved", Toast.LENGTH_SHORT).show()
+    private fun saveUpdateNoteInViewModel(note: Note) {
         noteViewModel.insert(note)
+        this.arguments?.clear() // We can safely clear the arguments as it will only contain the note, which has now been added to the database
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -122,8 +117,18 @@ class MainFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.delete_all_notes -> {
-                noteViewModel.deleteAllNotes()
-                Toast.makeText(activity, "All notes deleted", Toast.LENGTH_SHORT).show()
+                AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.delete_all_notes)
+                    .setMessage(R.string.delete_all_notes_prompt)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(
+                        android.R.string.yes
+                    ) { _, _ ->
+                        noteViewModel.deleteAllNotes()
+                        Toast.makeText(activity, "All notes deleted", Toast.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton(android.R.string.no, null).show()
+
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -132,11 +137,6 @@ class MainFragment : Fragment() {
 
     companion object {
         const val TAG = "MainFragment"
-        const val ADD_NOTE_REQUEST = 1
-        const val EDIT_NOTE_REQUEST = 2
 
-        fun newInstance(): MainFragment {
-            return MainFragment()
-        }
     }
 }

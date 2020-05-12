@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Notes</string>
     <string name="delete_all_notes">Delete All Notes</string>
+    <string name="delete_all_notes_prompt">Are you sure you want to delete all notes?</string>
 </resources>

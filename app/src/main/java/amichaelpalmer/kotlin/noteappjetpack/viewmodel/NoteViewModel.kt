@@ -21,10 +21,6 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         repository.insertOrUpdate(note)
     }
 
-//    fun update(note: Note) {
-//        repository.update(note)
-//    }
-
     fun delete(note: Note) {
         //Log.d(TAG, ".delete starts")
         repository.delete(note)

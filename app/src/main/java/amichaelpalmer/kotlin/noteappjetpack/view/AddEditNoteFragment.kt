@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import com.example.jetpackarchitecturedemo.R
 
 class AddEditNoteFragment : Fragment() {
+
     private lateinit var editTextTitle: EditText
     private lateinit var editTextDescription: EditText
     private lateinit var numberPickerPriority: NumberPicker
@@ -49,7 +50,6 @@ class AddEditNoteFragment : Fragment() {
 
         // Check if we're editing a saved note
         if (note != null) { // We're editing an existing note
-            Log.d(TAG, ".onCreateView: note not null, setting view fields for editing")
             requireActivity().title = "Edit"
             // Get fields from bundle and set them in the views
             editTextTitle.setText(note?.getTitle)
@@ -86,17 +86,22 @@ class AddEditNoteFragment : Fragment() {
         val priority = numberPickerPriority.value
 
         if (title.trim().isEmpty()) {
-            Toast.makeText(requireActivity(), "Note requires a title", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "Title required", Toast.LENGTH_SHORT).show()
             return
         } else if (description.trim().isEmpty()) {
-            Toast.makeText(requireActivity(), "Note requires a description", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "Description required", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
         val newNote = Note(title, description, priority)
+
         if (note != null) {
             // If note currently exists, get the ID so we can replace it in Room
             newNote.id = note!!.id
+            Toast.makeText(requireContext(), "Note updated", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(requireContext(), "Note saved", Toast.LENGTH_SHORT).show()
         }
 
         val action = AddEditNoteFragmentDirections.actionAddEditNoteFragmentToMainFragment(newNote)
@@ -106,10 +111,5 @@ class AddEditNoteFragment : Fragment() {
 
     companion object {
         private const val TAG = "AddEditNoteFragment"
-        const val BUNDLE_ID = "EXTRA_ID"
-        const val BUNDLE_TITLE = "EXTRA_TITLE"
-        const val BUNDLE_DESCRIPTION = "EXTRA_DESCRIPTION"
-        const val BUNDLE_PRIORITY = "EXTRA_PRIORITY"
-        const val INVALID_ID = -1
     }
 }

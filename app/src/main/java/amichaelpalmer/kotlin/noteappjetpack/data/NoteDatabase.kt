@@ -24,7 +24,6 @@ abstract class NoteDatabase : RoomDatabase() {
                         NoteDatabase::class.java, "note_database"
                     )
                         .fallbackToDestructiveMigration()
-                        .addCallback(roomCallback)
                         .build()
                 }
             }
@@ -35,46 +34,6 @@ abstract class NoteDatabase : RoomDatabase() {
             instance = null
         }
 
-        // Populates the database with some notes on creation
-        private val roomCallback = object : RoomDatabase.Callback() {
-            override fun onCreate(sqLiteDatabase: SupportSQLiteDatabase) {
-                super.onCreate(sqLiteDatabase)
-                PopulateDbAsyncTask(
-                    instance
-                )
-                    .execute()
-            }
-        }
-
-    }
-
-    private class PopulateDbAsyncTask(noteDatabase: NoteDatabase?) : AsyncTask<Unit, Unit, Unit>() {
-        private val noteDao = noteDatabase?.noteDao()
-
-        override fun doInBackground(vararg p0: Unit?) {
-            // Insert some placeholder notes into the database
-            noteDao?.insertOrUpdate(
-                Note(
-                    "Title 1",
-                    "Description 1",
-                    1
-                )
-            )
-            noteDao?.insertOrUpdate(
-                Note(
-                    "Title 2",
-                    "Description 2",
-                    2
-                )
-            )
-            noteDao?.insertOrUpdate(
-                Note(
-                    "Title 3",
-                    "Description 3",
-                    3
-                )
-            )
-        }
     }
 
 }

@@ -15,7 +15,6 @@ interface NoteDao {
     @Delete
     fun delete(note: Note)
 
-    // @Query annotation used for custom
     @Query("DELETE FROM note_table")
     fun deleteAllNotes()
 

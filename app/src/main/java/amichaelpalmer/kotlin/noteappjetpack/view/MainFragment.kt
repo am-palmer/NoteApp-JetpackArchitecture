@@ -93,7 +93,6 @@ class MainFragment : Fragment() {
 
         adapter.setOnItemLongTapListener(object : NoteAdapter.OnItemLongTapListener {
             override fun onItemLongTap(note: Note) {
-                Log.d(TAG, "itemLongTapListener: item long tapped")
                 val action = MainFragmentDirections.actionMainFragmentToAddEditNoteFragment(note)
                 view.findNavController().navigate(action)
             }

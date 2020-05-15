@@ -22,7 +22,6 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun delete(note: Note) {
-        //Log.d(TAG, ".delete starts")
         repository.delete(note)
     }
 
@@ -30,11 +29,11 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         repository.deleteAllNotes()
     }
 
-    fun getNoteList(): LiveData<List<Note>>{
+    fun getNoteList(): LiveData<List<Note>> {
         return allNotes
     }
 
-    companion object{
+    companion object {
         private const val TAG = "NoteViewModel"
     }
 
@@ -42,8 +41,6 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
 class NoteViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return NoteViewModel(
-            application
-        ) as T
+        return NoteViewModel(application) as T
     }
 }

@@ -5,6 +5,8 @@ import android.os.AsyncTask
 import android.util.Log
 import androidx.lifecycle.LiveData
 
+// todo: coroutines
+
 class NoteRepository(application: Application) {
     private val noteDao: NoteDao by lazy { NoteDatabase.getInstance(application)!!.noteDao() }
     private val allNotes: LiveData<List<Note>> by lazy { noteDao.getAllNotes() }
@@ -18,7 +20,6 @@ class NoteRepository(application: Application) {
     }
 
     fun delete(note: Note) {
-        //Log.d(TAG, ".delete ")
         DeleteNoteAsyncTask(
             noteDao
         ).execute(note)
@@ -46,7 +47,6 @@ class NoteRepository(application: Application) {
 
         private class DeleteNoteAsyncTask(val noteDao: NoteDao) : AsyncTask<Note, Unit, Unit>() {
             override fun doInBackground(vararg notes: Note?) {
-                //Log.d(TAG, ".deleteNoteAsyncTask: deleting note with title ${notes[0]!!.getTitle}")
                 noteDao.delete(notes[0]!!)
             }
         }

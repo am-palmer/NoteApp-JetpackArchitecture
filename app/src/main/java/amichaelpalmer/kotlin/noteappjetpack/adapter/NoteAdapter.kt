@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackarchitecturedemo.R
 
-class NoteAdapter : ListAdapter<Note, NoteAdapter.NoteViewHolder>(
-    DIFF_CALLBACK
-) {
+class NoteAdapter : ListAdapter<Note, NoteAdapter.NoteViewHolder>(DIFF_CALLBACK) {
     private var listener: OnItemLongTapListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {

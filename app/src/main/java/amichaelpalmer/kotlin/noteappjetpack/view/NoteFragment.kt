@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackarchitecturedemo.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainFragment : Fragment() {
+class NoteFragment : Fragment() {
 
     private lateinit var noteViewModel: NoteViewModel
 
@@ -131,7 +131,7 @@ class MainFragment : Fragment() {
     }
 
     companion object {
-        const val TAG = "MainFragment"
+        const val TAG = "NoteFragment"
 
     }
 }

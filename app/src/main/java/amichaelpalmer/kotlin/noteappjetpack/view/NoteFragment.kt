@@ -35,7 +35,7 @@ class NoteFragment : Fragment() {
 
         // If there is a Note in the arguments, it means we've just come back from the AddEditNoteFragment and need to update the ViewModel
         arguments?.let {
-            val safeArgs = MainFragmentArgs.fromBundle(it)
+            val safeArgs = NoteFragmentArgs.fromBundle(it)
             val note = safeArgs.note
             if (note != null) {
                 saveUpdateNoteInViewModel(note)
@@ -60,7 +60,7 @@ class NoteFragment : Fragment() {
         floatingActionButton.setOnClickListener {
             Log.d(TAG, "floatingActionButton clicked")
             val action =
-                MainFragmentDirections.actionMainFragmentToAddEditNoteFragment(null) // We aren't editing a note so we pass null
+                NoteFragmentDirections.actionMainFragmentToAddEditNoteFragment(null) // We aren't editing a note so we pass null
             view.findNavController().navigate(action)
         }
         val recyclerView: RecyclerView = view.findViewById(R.id.list_recycler_view)
@@ -93,7 +93,7 @@ class NoteFragment : Fragment() {
 
         adapter.setOnItemLongTapListener(object : NoteAdapter.OnItemLongTapListener {
             override fun onItemLongTap(note: Note) {
-                val action = MainFragmentDirections.actionMainFragmentToAddEditNoteFragment(note)
+                val action = NoteFragmentDirections.actionMainFragmentToAddEditNoteFragment(note)
                 view.findNavController().navigate(action)
             }
         })

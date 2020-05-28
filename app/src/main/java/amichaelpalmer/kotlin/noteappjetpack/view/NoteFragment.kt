@@ -58,7 +58,6 @@ class NoteFragment : Fragment() {
 
         val floatingActionButton: FloatingActionButton = view.findViewById(R.id.add_note_fab)
         floatingActionButton.setOnClickListener {
-            Log.d(TAG, "floatingActionButton clicked")
             val action =
                 NoteFragmentDirections.actionMainFragmentToAddEditNoteFragment(null) // We aren't editing a note so we pass null
             view.findNavController().navigate(action)
@@ -112,6 +111,7 @@ class NoteFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.delete_all_notes -> {
+                // Display an alert dialog to confirm that the user wishes to take this irreversible action
                 AlertDialog.Builder(requireContext())
                     .setTitle(R.string.delete_all_notes)
                     .setMessage(R.string.delete_all_notes_prompt)

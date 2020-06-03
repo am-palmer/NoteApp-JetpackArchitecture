@@ -8,17 +8,19 @@ import androidx.room.*
 interface NoteDao {
     // Method signatures for all the operations we need
 
+    // Suspend: keyword indicates this method may be run in a coroutine
+
     // Annotations generate the code for us
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOrUpdate(note: Note)
+    suspend fun insertOrUpdate(note: Note)
 
     @Delete
-    fun delete(note: Note)
+    suspend fun delete(note: Note)
 
     @Query("DELETE FROM note_table")
-    fun deleteAllNotes()
+    suspend fun deleteAllNotes()
 
     // LiveData - we can observe this object and be able to notify the activity/fragment
     @Query("SELECT * FROM NOTE_TABLE ORDER BY priority DESC")
-    fun getAllNotes(): LiveData<List<Note>>
+    suspend fun getAllNotes(): LiveData<List<Note>>
 }

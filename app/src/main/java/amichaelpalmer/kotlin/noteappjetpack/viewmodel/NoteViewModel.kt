@@ -6,6 +6,8 @@ import android.app.Application
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 
+// Coroutines are launched in the ViewModel to interact with the Room database
+
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: NoteRepository by lazy {
         NoteRepository(
@@ -32,11 +34,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getNoteList(): LiveData<List<Note>> {
-        return liveData { emit(repository.getAllNotes()) }
-    }
-
-    companion object {
-        private const val TAG = "NoteViewModel"
+        return liveData { emit(repository.getAllNotes()) } // todo emit: possibly causing bug related to observe?
     }
 
 }

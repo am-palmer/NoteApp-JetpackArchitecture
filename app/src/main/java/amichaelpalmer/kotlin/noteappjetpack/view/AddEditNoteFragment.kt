@@ -108,7 +108,4 @@ class AddEditNoteFragment : Fragment() {
             .navigate(action)
     }
 
-    companion object {
-        private const val TAG = "AddEditNoteFragment"
-    }
 }

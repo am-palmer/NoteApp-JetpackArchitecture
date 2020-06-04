@@ -28,10 +28,6 @@ abstract class NoteDatabase : RoomDatabase() {
             return instance
         }
 
-        fun destroyInstance() {
-            instance = null
-        }
-
     }
 
 }

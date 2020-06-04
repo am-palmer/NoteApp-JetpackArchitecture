@@ -23,8 +23,4 @@ class NoteRepository(private val application: Application) {
         return noteDao.getAllNotes()
     }
 
-    companion object {
-        private const val TAG = "NoteRepository"
-    }
-
 }

@@ -1,14 +1,11 @@
 package amichaelpalmer.kotlin.noteappjetpack.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 // @Dao: Data access object used by Room
+// Note that Room runs suspend functions on a custom main-safe dispatcher: should NOT use withContext(IO) when running these functions
 @Dao
 interface NoteDao {
-    // Method signatures for all the operations we need
-
-    // Suspend: keyword indicates this method may be run in a coroutine
 
     // Annotations generate the code for us
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -22,5 +19,5 @@ interface NoteDao {
 
     // LiveData - we can observe this object and be able to notify the activity/fragment
     @Query("SELECT * FROM NOTE_TABLE ORDER BY priority DESC")
-    suspend fun getAllNotes(): LiveData<List<Note>>
+    suspend fun getAllNotes(): List<Note>
 }

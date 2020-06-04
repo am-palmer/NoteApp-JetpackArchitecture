@@ -1,62 +1,30 @@
 package amichaelpalmer.kotlin.noteappjetpack.data
 
 import android.app.Application
-import android.os.AsyncTask
-import android.util.Log
-import androidx.lifecycle.LiveData
 
-// todo: coroutines
+class NoteRepository(private val application: Application) {
+    private val noteDao: NoteDao by lazy { NoteDatabase.getInstance(application)!!.noteDao() } // todo: without doublebang?
 
-class NoteRepository(application: Application) {
-    private val noteDao: NoteDao by lazy { NoteDatabase.getInstance(application)!!.noteDao() }
-    private val allNotes: LiveData<List<Note>> by lazy { noteDao.getAllNotes() }
-
-    // Note Room doesn't allow these functions on the main thread as it could freeze the app. We have to use a second thread (asynctask here todo: replace asynctask with coroutine)
+    // Note Room only allows calls off the main thread to prevent freezing. We use coroutines
     // These represent the API exposed by the repository to the ViewModel(s)
-    fun insertOrUpdate(note: Note): AsyncTask<Note, Unit, Unit>? {
-        return InsertUpdateNoteAsyncTask(
-            noteDao
-        ).execute(note)
+    suspend fun insertOrUpdate(note: Note) {
+        noteDao.insertOrUpdate(note)
     }
 
-    fun delete(note: Note) {
-        DeleteNoteAsyncTask(
-            noteDao
-        ).execute(note)
+    suspend fun delete(note: Note) {
+        noteDao.delete(note)
     }
 
-    fun deleteAllNotes() {
-        DeleteAllNotesAsyncTask(
-            noteDao
-        ).execute()
+    suspend fun deleteAllNotes() {
+        noteDao.deleteAllNotes()
     }
 
-    val getAllNotes get() = allNotes
+    suspend fun getAllNotes(): List<Note> {
+        return noteDao.getAllNotes()
+    }
 
-    //  Inner Async task classes as object
     companion object {
-
         private const val TAG = "NoteRepository"
-
-        private class InsertUpdateNoteAsyncTask(val noteDao: NoteDao) :
-            AsyncTask<Note, Unit, Unit>() {
-            override fun doInBackground(vararg notes: Note?) {
-                noteDao.insertOrUpdate(notes[0]!!)
-            }
-        }
-
-        private class DeleteNoteAsyncTask(val noteDao: NoteDao) : AsyncTask<Note, Unit, Unit>() {
-            override fun doInBackground(vararg notes: Note?) {
-                noteDao.delete(notes[0]!!)
-            }
-        }
-
-        private class DeleteAllNotesAsyncTask(val noteDao: NoteDao) :
-            AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg notes: Unit?) {
-                noteDao.deleteAllNotes()
-            }
-        }
     }
 
 }

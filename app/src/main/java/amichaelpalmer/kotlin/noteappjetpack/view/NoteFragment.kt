@@ -69,6 +69,7 @@ class NoteFragment : Fragment() {
 
         noteViewModel.getNoteList().observe(viewLifecycleOwner, Observer {
             // Triggered every time there is a change to the LiveData
+            Log.d(TAG, "observer triggers")
             adapter.submitList(it)
         })
 
@@ -86,6 +87,7 @@ class NoteFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 noteViewModel.delete(adapter.getNoteAtPosition(viewHolder.adapterPosition))
                 Toast.makeText(activity, "Note deleted", Toast.LENGTH_SHORT).show()
+                adapter.notifyItemChanged(viewHolder.adapterPosition)
             }
         }
         ).attachToRecyclerView(recyclerView)
@@ -119,7 +121,7 @@ class NoteFragment : Fragment() {
                     .setPositiveButton(
                         android.R.string.yes
                     ) { _, _ ->
-                        noteViewModel.deleteAllNotes()
+                        noteViewModel.deleteAllNotes() // todo: doesn't trigger observer?
                         Toast.makeText(activity, "All notes deleted", Toast.LENGTH_SHORT).show()
                     }
                     .setNegativeButton(android.R.string.no, null).show()

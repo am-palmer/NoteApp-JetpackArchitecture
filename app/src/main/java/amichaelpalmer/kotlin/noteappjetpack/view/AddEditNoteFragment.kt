@@ -2,7 +2,6 @@ package amichaelpalmer.kotlin.noteappjetpack.view
 
 import amichaelpalmer.kotlin.noteappjetpack.data.Note
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.NumberPicker

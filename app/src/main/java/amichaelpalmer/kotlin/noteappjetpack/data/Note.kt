@@ -29,6 +29,14 @@ open class Note(
         parcel.readInt() // Priority
     )
 
+    override fun equals(other: Any?): Boolean {
+        if (other != null && other::class.java == this::class.java) {
+            other as Note
+            return (this.id == other.id && this.title == other.getTitle && this.description == other.getDescription && this.priority == other.getPriority)
+        }
+        return super.equals(other)
+    }
+
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(title)
         dest.writeString(description)

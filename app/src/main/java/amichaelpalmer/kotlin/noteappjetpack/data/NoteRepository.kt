@@ -1,6 +1,7 @@
 package amichaelpalmer.kotlin.noteappjetpack.data
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 
 class NoteRepository(private val application: Application) {
     private val noteDao: NoteDao by lazy { NoteDatabase.getInstance(application)!!.noteDao() } // todo: without doublebang?
@@ -19,7 +20,7 @@ class NoteRepository(private val application: Application) {
         noteDao.deleteAllNotes()
     }
 
-    suspend fun getAllNotes(): List<Note> {
+    fun getAllNotes(): LiveData<List<Note>> {
         return noteDao.getAllNotes()
     }
 

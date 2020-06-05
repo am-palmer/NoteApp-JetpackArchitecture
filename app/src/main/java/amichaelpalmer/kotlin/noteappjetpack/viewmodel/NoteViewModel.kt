@@ -34,7 +34,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getNoteList(): LiveData<List<Note>> {
-        return liveData { emit(repository.getAllNotes()) } // todo emit: possibly causing bug related to observe?
+       return repository.getAllNotes()
     }
 
 }

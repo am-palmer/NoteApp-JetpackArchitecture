@@ -1,5 +1,6 @@
 package amichaelpalmer.kotlin.noteappjetpack.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 // @Dao: Data access object used by Room
@@ -17,7 +18,6 @@ interface NoteDao {
     @Query("DELETE FROM note_table")
     suspend fun deleteAllNotes()
 
-    // LiveData - we can observe this object and be able to notify the activity/fragment
     @Query("SELECT * FROM NOTE_TABLE ORDER BY priority DESC")
-    suspend fun getAllNotes(): List<Note>
+    fun getAllNotes(): LiveData<List<Note>>
 }

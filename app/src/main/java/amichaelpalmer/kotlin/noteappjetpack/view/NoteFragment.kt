@@ -6,7 +6,6 @@ import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModel
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModelFactory
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -21,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class NoteFragment : Fragment() {
 
     private lateinit var noteViewModel: NoteViewModel
+    private lateinit var adapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,12 +64,11 @@ class NoteFragment : Fragment() {
         }
         val recyclerView: RecyclerView = view.findViewById(R.id.list_recycler_view)
         recyclerView.setHasFixedSize(true) // Efficiency, true if we know the RecyclerView size won't change
-        val adapter = NoteAdapter()
+        adapter = NoteAdapter()
         recyclerView.adapter = adapter
 
+        // Create the observer which will notify the adapter when the Note list changes
         noteViewModel.getNoteList().observe(viewLifecycleOwner, Observer {
-            // Triggered every time there is a change to the LiveData
-            Log.d(TAG, "observer triggers")
             adapter.submitList(it)
         })
 
@@ -84,7 +83,7 @@ class NoteFragment : Fragment() {
                 return false
             }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) { // todo: item 'flickers' when deleted
                 noteViewModel.delete(adapter.getNoteAtPosition(viewHolder.adapterPosition))
                 Toast.makeText(activity, "Note deleted", Toast.LENGTH_SHORT).show()
                 adapter.notifyItemChanged(viewHolder.adapterPosition)
@@ -102,7 +101,7 @@ class NoteFragment : Fragment() {
 
     private fun saveUpdateNoteInViewModel(note: Note) {
         noteViewModel.insert(note)
-        this.arguments?.clear() // We can safely clear the arguments as it will only contain the note, which has now been added to the database
+        this.arguments?.clear() // Clear the note as it has been added to the database
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -121,7 +120,7 @@ class NoteFragment : Fragment() {
                     .setPositiveButton(
                         android.R.string.yes
                     ) { _, _ ->
-                        noteViewModel.deleteAllNotes() // todo: doesn't trigger observer?
+                        noteViewModel.deleteAllNotes()
                         Toast.makeText(activity, "All notes deleted", Toast.LENGTH_SHORT).show()
                     }
                     .setNegativeButton(android.R.string.no, null).show()

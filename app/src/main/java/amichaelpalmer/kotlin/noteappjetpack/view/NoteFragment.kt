@@ -18,9 +18,7 @@ import com.example.jetpackarchitecturedemo.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NoteFragment : Fragment() {
-
     private lateinit var noteViewModel: NoteViewModel
-    //private lateinit var adapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +66,7 @@ class NoteFragment : Fragment() {
         recyclerView.adapter = adapter
 
         // Create the observer which will notify the adapter when the Note list changes
-        noteViewModel.getNoteList().observe(viewLifecycleOwner, Observer {
+        noteViewModel.getNotes().observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
 
@@ -131,8 +129,4 @@ class NoteFragment : Fragment() {
         }
     }
 
-    companion object {
-        const val TAG = "NoteFragment"
-
-    }
 }

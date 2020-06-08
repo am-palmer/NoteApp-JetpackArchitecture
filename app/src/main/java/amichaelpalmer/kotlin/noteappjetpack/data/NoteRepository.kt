@@ -1,10 +1,7 @@
 package amichaelpalmer.kotlin.noteappjetpack.data
 
-import android.app.Application
-import androidx.lifecycle.LiveData
-
-class NoteRepository(private val application: Application) {
-    private val noteDao: NoteDao by lazy { NoteDatabase.getInstance(application)!!.noteDao() } // todo: without doublebang?
+class NoteRepository private constructor(private val noteDao: NoteDao) {
+    //private val noteDao: NoteDao by lazy { NoteDatabase.getInstance(application)!!.noteDao() } // todo: without doublebang?
 
     // Note Room only allows calls off the main thread to prevent freezing. We use coroutines
     // These represent the API exposed by the repository to the ViewModel(s)
@@ -20,8 +17,18 @@ class NoteRepository(private val application: Application) {
         noteDao.deleteAllNotes()
     }
 
-    fun getAllNotes(): LiveData<List<Note>> {
-        return noteDao.getAllNotes()
+    fun getNotes() = noteDao.getAllNotes()
+
+    companion object {
+
+        // Singleton instantiation
+        @Volatile
+        private var instance: NoteRepository? = null
+
+        fun getInstance(noteDao: NoteDao) =
+            instance ?: synchronized(this) {
+                instance ?: NoteRepository(noteDao).also { instance = it }
+            }
     }
 
 }

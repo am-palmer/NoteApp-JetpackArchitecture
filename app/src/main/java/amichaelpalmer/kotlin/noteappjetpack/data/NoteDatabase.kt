@@ -14,21 +14,34 @@ abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
 
     companion object {
+
+        @Volatile
         private var instance: NoteDatabase? = null
 
-        fun getInstance(context: Context): NoteDatabase? {
-            if (instance == null) {
-                synchronized(NoteDatabase::class) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        NoteDatabase::class.java, "note_database"
-                    )
-                        .fallbackToDestructiveMigration()
-                        .build()
-                }
+        fun getInstance(context: Context): NoteDatabase {
+            return instance ?: synchronized(this) {
+                instance ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    NoteDatabase::class.java, "note_database"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
             }
-            return instance
         }
+
+//        fun getInstance(context: Context): NoteDatabase? {
+//            if (instance == null) {
+//                synchronized(NoteDatabase::class) {
+//                    instance = Room.databaseBuilder(
+//                        context.applicationContext,
+//                        NoteDatabase::class.java, "note_database"
+//                    )
+//                        .fallbackToDestructiveMigration()
+//                        .build()
+//                }
+//            }
+//            return instance
+//        }
 
     }
 

@@ -20,7 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class NoteFragment : Fragment() {
 
     private lateinit var noteViewModel: NoteViewModel
-    private lateinit var adapter: NoteAdapter
+    //private lateinit var adapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +64,7 @@ class NoteFragment : Fragment() {
         }
         val recyclerView: RecyclerView = view.findViewById(R.id.list_recycler_view)
         recyclerView.setHasFixedSize(true) // Efficiency, true if we know the RecyclerView size won't change
-        adapter = NoteAdapter()
+        val adapter = NoteAdapter()
         recyclerView.adapter = adapter
 
         // Create the observer which will notify the adapter when the Note list changes

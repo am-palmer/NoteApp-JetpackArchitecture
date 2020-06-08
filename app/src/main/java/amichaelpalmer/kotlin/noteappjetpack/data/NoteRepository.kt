@@ -1,8 +1,6 @@
 package amichaelpalmer.kotlin.noteappjetpack.data
 
 class NoteRepository private constructor(private val noteDao: NoteDao) {
-    //private val noteDao: NoteDao by lazy { NoteDatabase.getInstance(application)!!.noteDao() } // todo: without doublebang?
-
     // Note Room only allows calls off the main thread to prevent freezing. We use coroutines
     // These represent the API exposed by the repository to the ViewModel(s)
     suspend fun insertOrUpdate(note: Note) {
@@ -20,7 +18,6 @@ class NoteRepository private constructor(private val noteDao: NoteDao) {
     fun getNotes() = noteDao.getAllNotes()
 
     companion object {
-
         // Singleton instantiation
         @Volatile
         private var instance: NoteRepository? = null

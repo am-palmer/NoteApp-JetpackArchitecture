@@ -29,20 +29,6 @@ abstract class NoteDatabase : RoomDatabase() {
             }
         }
 
-//        fun getInstance(context: Context): NoteDatabase? {
-//            if (instance == null) {
-//                synchronized(NoteDatabase::class) {
-//                    instance = Room.databaseBuilder(
-//                        context.applicationContext,
-//                        NoteDatabase::class.java, "note_database"
-//                    )
-//                        .fallbackToDestructiveMigration()
-//                        .build()
-//                }
-//            }
-//            return instance
-//        }
-
     }
 
 }

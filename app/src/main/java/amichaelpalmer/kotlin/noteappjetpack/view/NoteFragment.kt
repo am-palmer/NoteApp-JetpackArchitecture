@@ -81,7 +81,7 @@ class NoteFragment : Fragment() {
                 return false
             }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) { // todo: item 'flickers' when deleted
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) { // todo: Item 'flickers' when deleted
                 noteViewModel.delete(adapter.getNoteAtPosition(viewHolder.adapterPosition))
                 Toast.makeText(activity, "Note deleted", Toast.LENGTH_SHORT).show()
                 adapter.notifyItemChanged(viewHolder.adapterPosition)

@@ -59,7 +59,7 @@ class AddEditNoteFragment : Fragment() {
 
         } else { // We're creating a new note
             requireActivity().title = "New"
-            numberPickerPriority.value = 1 // May be unneeded
+            numberPickerPriority.value = 1
         }
 
     }
@@ -85,10 +85,10 @@ class AddEditNoteFragment : Fragment() {
         val priority = numberPickerPriority.value
 
         if (title.trim().isEmpty()) {
-            Toast.makeText(requireActivity(), "Title required", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "Note requires a title", Toast.LENGTH_SHORT).show()
             return
         } else if (description.trim().isEmpty()) {
-            Toast.makeText(requireActivity(), "Description required", Toast.LENGTH_SHORT)
+            Toast.makeText(requireActivity(), "Note requires a description", Toast.LENGTH_SHORT)
                 .show()
             return
         }

@@ -20,6 +20,7 @@ import com.example.jetpackarchitecturedemo.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NoteFragment : Fragment() {
+
     private val noteViewModel: NoteViewModel by viewModels {
         InjectorUtils.provideNoteViewModelFactory(this)
     }

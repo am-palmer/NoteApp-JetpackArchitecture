@@ -2,6 +2,7 @@ package amichaelpalmer.kotlin.noteappjetpack.view
 
 import amichaelpalmer.kotlin.noteappjetpack.adapter.NoteAdapter
 import amichaelpalmer.kotlin.noteappjetpack.data.Note
+import amichaelpalmer.kotlin.noteappjetpack.utils.InjectorUtils
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModel
 import amichaelpalmer.kotlin.noteappjetpack.viewmodel.NoteViewModelFactory
 import android.app.AlertDialog
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -18,18 +20,12 @@ import com.example.jetpackarchitecturedemo.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NoteFragment : Fragment() {
-    private lateinit var noteViewModel: NoteViewModel
+    private val noteViewModel: NoteViewModel by viewModels {
+        InjectorUtils.provideNoteViewModelFactory(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // We ask the system for a ViewModel; don't have to handle instance management
-        noteViewModel = ViewModelProvider(
-            requireActivity(),
-            NoteViewModelFactory(
-                requireActivity().application
-            )
-        ).get(NoteViewModel::class.java)
 
         // If there is a Note in the arguments, it means we've just come back from the AddEditNoteFragment and need to update the ViewModel
         arguments?.let {
